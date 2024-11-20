@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Recognition Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #chat {
+            margin: 20px auto;
+            width: 60%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        input[type="file"] {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Recognition Chatbot</h1>
+    <div id="chat">
+        <h3>Upload an image to recognize objects</h3>
+        <input type="file" id="imageInput" accept="image/*">
+        <button id="uploadButton">Upload</button>
+        <p id="response"></p>
+    </div>
+    <script>
+        document.getElementById("uploadButton").addEventListener("click", async () => {
+            const imageInput = document.getElementById("imageInput").files[0];
+            if (!imageInput) {
+                alert("Please select an image!");
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append("image", imageInput);
+
+            const response = await fetch("/recognize", {
+                method: "POST",
+                body: formData,
+            });
+            
+            const result = await response.json();
+            document.getElementById("response").innerText = result.message;
+        });
+    </script>
+</body>
+</html>
